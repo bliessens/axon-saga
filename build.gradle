@@ -1,0 +1,50 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.8.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+
+    group = 'be.cegeka.vteam.axkeleton'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = 1.8
+
+
+    repositories {
+        mavenCentral()
+    }
+
+    ext {
+        axon_version = '3.0.7'
+        jackson_version = '2.6.3'
+        spring_version = '4.3.12.RELEASE'
+    }
+
+    dependencies {
+        compile "org.axonframework:axon-spring-boot-autoconfigure:$axon_version"
+
+        compile "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
+        compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_version"
+
+        testCompile "junit:junit:4.12"
+        testCompile "org.axonframework:axon-test:$axon_version"
+    }
+
+    idea {
+        module {
+            downloadSources = true
+            downloadJavadoc = true
+        }
+    }
+}
+
+
