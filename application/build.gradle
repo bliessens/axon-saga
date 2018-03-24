@@ -12,4 +12,10 @@ dependencies {
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 
+    parent.subprojects { p ->
+        // no touchy touchy here
+        if (p.projectDir.exists() && parent.ext.baselineNames.contains(p.name)) {
+            compile project(":$p.name")
+        }
+    }
 }
