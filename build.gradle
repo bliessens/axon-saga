@@ -52,7 +52,7 @@ ext {
 }
 task generateBaseline {
 
-    def rootPackage = project.group
+    def rootPackage = allprojects.find { it.name == "application"}.property("group")
     def packageDir = rootPackage.replaceAll("\\.", "/")
 
     doLast {
