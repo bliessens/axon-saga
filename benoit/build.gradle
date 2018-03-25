@@ -1,0 +1,9 @@
+
+ext {
+    dynamicInclusion = true
+}
+
+dependencies {
+    compile "org.springframework:spring-context:4.3.12.RELEASE"
+    compile project(":api")
+}
