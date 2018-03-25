@@ -48,11 +48,11 @@ subprojects {
 }
 
 ext {
-    baselineNames = ["dev1", "dev2", "dev3", "dev4"]
+    baselineNames = ["benoit"]
 }
 task generateBaseline {
 
-    def rootPackage = allprojects.find { it.name == "application"}.property("group")
+    def rootPackage = allprojects.find { it.name == "application" }.property("group")
     def packageDir = rootPackage.replaceAll("\\.", "/")
 
     doLast {
@@ -61,8 +61,9 @@ task generateBaseline {
             def className = it.capitalize() + "Configuration"
 
             mkdir "$rootDir/$it/src/main/java/$packageDir"
-            new File("$rootDir/$it/src/main/java/$packageDir/${className}.java").text =
-                    """package be.cegeka.vteam.axkeleton;
+            if (!file("$rootDir/$it/src/main/java/$packageDir/${className}.java").exists()) {
+                file("$rootDir/$it/src/main/java/$packageDir/${className}.java").text =
+                        """package be.cegeka.vteam.axkeleton;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -73,19 +74,22 @@ public class $className {
     
 }
 """
+            }
             mkdir "$rootDir/$it/src/main/resources"
             mkdir "$rootDir/$it/src/test/java"
             mkdir "$rootDir/$it/src/test/resources"
-            new File("$rootDir/$it/build.gradle").text =
-                    """ext { 
+            if (!file("$rootDir/$it/build.gradle").exists()) {
+                file("$rootDir/$it/build.gradle").text =
+                        """ext { 
     dynamicInclusion = true
 }
 
 dependencies {
-
+    compile "org.springframework:spring-context:4.3.12.RELEASE"
+    compile project(":api")
 }
 """
-
+            }
             def settings = new File("$rootDir/settings.gradle").text
             if (!settings.contains("include '$it'")) {
                 new File("$rootDir/settings.gradle").append("\ninclude '$it'")
