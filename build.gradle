@@ -80,11 +80,7 @@ public class $className {
             mkdir "$rootDir/$it/src/test/resources"
             if (!file("$rootDir/$it/build.gradle").exists()) {
                 file("$rootDir/$it/build.gradle").text =
-                        """ext { 
-    dynamicInclusion = true
-}
-
-dependencies {
+                        """dependencies {
     compile "org.springframework:spring-context:4.3.12.RELEASE"
     compile project(":api")
 }
