@@ -1,6 +1,6 @@
 package be.cegeka.vteam.axkeleton;
 
-import be.cegeka.vteam.axkeleton.saga.MySaga;
+import be.cegeka.vteam.axkeleton.saga.BenoitSaga;
 import org.axonframework.common.jpa.EntityManagerProvider;
 import org.axonframework.common.transaction.TransactionManager;
 import org.axonframework.eventhandling.EventProcessor;
@@ -27,13 +27,13 @@ import org.springframework.context.annotation.Profile;
 public class BenoitConfiguration {
 
     @Bean
-    public AnnotatedSagaManager<MySaga> sagaManager(SagaRepository<MySaga> repository) {
-        return new AnnotatedSagaManager<>(MySaga.class, repository);
+    public AnnotatedSagaManager<BenoitSaga> sagaManager(SagaRepository<BenoitSaga> repository) {
+        return new AnnotatedSagaManager<>(BenoitSaga.class, repository);
     }
 
     @Bean
-    public SagaRepository<MySaga> sagaRepository(@Qualifier("jpaSagaStore") SagaStore sagaStore, ResourceInjector injector) {
-        return new AnnotatedSagaRepository<>(MySaga.class, sagaStore, injector);
+    public SagaRepository<BenoitSaga> sagaRepository(@Qualifier("jpaSagaStore") SagaStore sagaStore, ResourceInjector injector) {
+        return new AnnotatedSagaRepository<>(BenoitSaga.class, sagaStore, injector);
     }
 
     @Bean("jpaSagaStore")

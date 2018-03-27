@@ -9,14 +9,16 @@ import org.axonframework.spring.stereotype.Saga;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Saga
-public class MySaga {
+@Profile("benoit")
+public class BenoitSaga {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MySaga.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BenoitSaga.class);
 
     private Map<String, Integer> fileGroupIds = new HashMap<>();
 
