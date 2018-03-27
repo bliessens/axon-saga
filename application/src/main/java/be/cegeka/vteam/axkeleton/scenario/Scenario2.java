@@ -14,7 +14,7 @@ import java.util.UUID;
  * - cancel FileGroup 1 upon completion of FileGroup2
  * - delete saga upon delivery of FileGroup2
  */
-@Component
+//@Component
 class Scenario2 extends AbstractScenario {
 
     private static final String FILE_GROUP_1 = "sc2-" + UUID.randomUUID().toString();
