@@ -1,7 +1,6 @@
 package be.cegeka.vteam.axkeleton;
 
-import be.cegeka.vteam.axkeleton.api.FileGroupCreatedEvent;
-import be.cegeka.vteam.axkeleton.api.FileGroupDeliveredEvent;
+import be.cegeka.vteam.axkeleton.api.*;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.saga.SagaEventHandler;
 import org.axonframework.eventhandling.saga.SagaLifecycle;
@@ -23,17 +22,27 @@ public class StephanSaga {
     @StartSaga
     @SagaEventHandler(associationProperty = "destination")
     public void onFileGroupCreated(FileGroupCreatedEvent event) {
-        System.out.println(event.toString());
         ids.add(event.getId());
     }
 
     @SagaEventHandler(associationProperty = "destination")
     public void onFileGroupDelivered(FileGroupDeliveredEvent event) {
-        System.out.println(event.toString());
         ids.remove(event.getId());
         if (ids.isEmpty()) {
             SagaLifecycle.end();
         }
+    }
+
+    @SagaEventHandler(associationProperty = "destination")
+    public void onFileGroupCompleted(FileGroupCompletedEvent event) {
+        ids.forEach(id -> {
+            if (!id.equals(event.getId())) {
+                commandGateway.sendAndWait(new CancelFileGroupCommand(id));
+            }
+        });
+
+        ids.clear();
+        ids.add(event.getId());
     }
 
     @Autowired

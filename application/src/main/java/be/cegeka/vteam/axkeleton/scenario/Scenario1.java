@@ -4,6 +4,7 @@ import be.cegeka.vteam.axkeleton.api.CompleteFileGroupCommand;
 import be.cegeka.vteam.axkeleton.api.CreateFileGroupCommand;
 import be.cegeka.vteam.axkeleton.api.DeliverFileGroupCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
