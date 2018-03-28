@@ -7,12 +7,14 @@ import org.axonframework.eventhandling.saga.SagaLifecycle;
 import org.axonframework.eventhandling.saga.StartSaga;
 import org.axonframework.spring.stereotype.Saga;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Saga
 @SuppressWarnings("unused")
+@Profile("stephan")
 public class StephanSaga {
 
     private transient CommandGateway commandGateway;
