@@ -22,3 +22,10 @@ create the HSQL database in folder `build/axon-db`
   * a `JpaTokenStore`
   * last but not least, a `TrackingEventProcessor`
 
+## Branches
+
+* master: Spring Boot application with Axon, HSQLDB &JPA autoconfiguration
+* solution: implemented saga with CommandGateway injected with ResourceInjector
+* solution-sagaParamResolver: implemented saga with CommandGateway injected with SpringParameterResolverFactory
+* starting-point: where to start implementing hte exercise, gradle modules can be generated for each participant
+
