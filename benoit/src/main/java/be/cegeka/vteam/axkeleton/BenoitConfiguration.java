@@ -7,16 +7,17 @@ import org.axonframework.eventhandling.EventProcessor;
 import org.axonframework.eventhandling.SimpleEventHandlerInvoker;
 import org.axonframework.eventhandling.TrackingEventProcessor;
 import org.axonframework.eventhandling.saga.AnnotatedSagaManager;
-import org.axonframework.eventhandling.saga.ResourceInjector;
 import org.axonframework.eventhandling.saga.SagaRepository;
 import org.axonframework.eventhandling.saga.repository.AnnotatedSagaRepository;
+import org.axonframework.eventhandling.saga.repository.NoResourceInjector;
 import org.axonframework.eventhandling.saga.repository.SagaStore;
 import org.axonframework.eventhandling.saga.repository.jpa.JpaSagaStore;
 import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventhandling.tokenstore.jpa.JpaTokenStore;
 import org.axonframework.eventsourcing.eventstore.EventStore;
+import org.axonframework.messaging.annotation.ParameterResolverFactory;
 import org.axonframework.serialization.xml.XStreamSerializer;
-import org.axonframework.spring.saga.SpringResourceInjector;
+import org.axonframework.spring.config.annotation.SpringParameterResolverFactoryBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,13 +28,15 @@ import org.springframework.context.annotation.Profile;
 public class BenoitConfiguration {
 
     @Bean
-    public AnnotatedSagaManager<BenoitSaga> sagaManager(SagaRepository<BenoitSaga> repository) {
-        return new AnnotatedSagaManager<>(BenoitSaga.class, repository);
+    public AnnotatedSagaManager<BenoitSaga> sagaManager(SagaRepository<BenoitSaga> repository,
+                                                        @Qualifier("springParameterResolver") ParameterResolverFactory parameterResolver) {
+        return new AnnotatedSagaManager<>(BenoitSaga.class, repository, parameterResolver);
     }
 
     @Bean
-    public SagaRepository<BenoitSaga> sagaRepository(@Qualifier("jpaSagaStore") SagaStore sagaStore, ResourceInjector injector) {
-        return new AnnotatedSagaRepository<>(BenoitSaga.class, sagaStore, injector);
+    public SagaRepository<BenoitSaga> sagaRepository(@Qualifier("jpaSagaStore") SagaStore sagaStore,
+                                                     @Qualifier("springParameterResolver") ParameterResolverFactory parameterResolver) {
+        return new AnnotatedSagaRepository<>(BenoitSaga.class, sagaStore, NoResourceInjector.INSTANCE, parameterResolver);
     }
 
     @Bean("jpaSagaStore")
@@ -41,15 +44,20 @@ public class BenoitConfiguration {
         return new JpaSagaStore(serializer, provider);
     }
 
+    @Bean("springParameterResolver")
+    public SpringParameterResolverFactoryBean parameterResolverFactoryBean() {
+        return new SpringParameterResolverFactoryBean();
+    }
+
     @Bean
     public XStreamSerializer xStreamSerializer() {
         return new XStreamSerializer();
     }
 
-    @Bean
-    public ResourceInjector injector() {
-        return new SpringResourceInjector();
-    }
+//    @Bean
+//    public ResourceInjector injector() {
+//        return new SpringResourceInjector();
+//    }
 
     @Bean
     public TokenStore tokenStore(EntityManagerProvider provider, XStreamSerializer serializer) {

@@ -8,7 +8,6 @@ import org.axonframework.eventhandling.saga.StartSaga;
 import org.axonframework.spring.stereotype.Saga;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 
 import java.util.HashMap;
@@ -22,7 +21,7 @@ public class BenoitSaga {
 
     private Map<String, Integer> fileGroupIds = new HashMap<>();
 
-    private transient CommandGateway gateway;
+    // private transient CommandGateway gateway;
 
     @StartSaga
     @SagaEventHandler(associationProperty = "destination")
@@ -38,7 +37,7 @@ public class BenoitSaga {
     }
 
     @SagaEventHandler(associationProperty = "destination")
-    public void onEvent(FileGroupCompletedEvent event) {
+    public void onEvent(FileGroupCompletedEvent event, CommandGateway gateway) {
         LOG.info("A least 1 FileGroup is completed, {}", this.fileGroupIds.size() > 1 ? "must cancel FileGroup(s) with earlier timestamp" : "no other FileGroup are being tracked");
         int mostRecentTimestamp = this.fileGroupIds.get(event.getId());
         for (Map.Entry<String, Integer> entry : fileGroupIds.entrySet()) {
@@ -58,8 +57,8 @@ public class BenoitSaga {
         }
     }
 
-    @Autowired
-    public void setGateway(CommandGateway gateway) {
-        this.gateway = gateway;
-    }
+//    @Autowired
+//    public void setGateway(CommandGateway gateway) {
+//        this.gateway = gateway;
+//    }
 }
